@@ -6,6 +6,8 @@ import cv2
 import matplotlib.pyplot as plt
 
 from functools import wraps
+from os import mkdir
+from os.path import isdir
 
 
 def benchmark(func):
@@ -26,8 +28,8 @@ def nearest(image: np.ndarray, size: int) -> np.ndarray:
     img_size = image.shape[0:2][0]
     scale = size / img_size
 
-    for x in range(size):
-        for y in range(size):
+    for y in range(size):
+        for x in range(size):
             x_nearest, y_nearest = np.int64(np.round(x / scale)), np.int64(np.round(y / scale))
 
             if x_nearest == img_size:  # sometimes it has problem with indexes
@@ -47,8 +49,8 @@ def bilinear(image: np.ndarray, size: int) -> np.ndarray:
     img_size = image.shape[0:2][0]
     scale = size / img_size
 
-    for x in range(size):
-        for y in range(size):
+    for y in range(size):
+        for x in range(size):
             x_old = x / scale
             y_old = y / scale
 
@@ -86,8 +88,8 @@ def rotate(image: np.ndarray, angle: float) -> np.ndarray:
     rotated = np.zeros_like(image)
     radians = np.radians(angle)
 
-    for x in range(size):
-        for y in range(size):
+    for y in range(size):
+        for x in range(size):
             xt = size - 1 - x - x_center
             yt = size - 1 - y - y_center
 
@@ -97,8 +99,8 @@ def rotate(image: np.ndarray, angle: float) -> np.ndarray:
             x_prime = np.int64(x_center - x_prime)
             y_prime = np.int64(y_center - y_prime)
 
-            if x_prime < size and y_prime < size:
-                rotated[x_prime][y_prime] = image[x][y]
+            if 0 <= x_prime < size and 0 <= y_prime < size and x_prime >= 0 and y_prime >= 0:
+                rotated[y_prime, x_prime, :] = image[y, x, :]
 
     return rotated
 
@@ -193,22 +195,25 @@ def main() -> None:
         else restore_default_size(shrank, size, 'bilinear') if args.bilinear \
         else restore_default_size(shrank, size, 'keys')
 
+    mkdir('./assets') if args.save and not isdir('./assets') else None
+
     shrank = shrank.astype(np.uint8)
-    cv2.imwrite(f'nearest-scaled.png' if args.nearest
-                else 'bilinear-scaled.png' if args.bilinear
-                else 'keys-scaled.png', shrank) if args.save else None
+    cv2.imwrite(f'./assets/nearest-scaled.png' if args.nearest
+                else './assets/bilinear-scaled.png' if args.bilinear
+                else './assets/keys-scaled.png', shrank) if args.save else None
 
     restored = restored.astype(np.uint8)
-    cv2.imwrite(f'nearest-rescaled.png'
-                if args.nearest else 'bilinear-rescaled.png' if args.bilinear
-                else 'keys-rescaled.png', restored) if args.save else None
+    cv2.imwrite(f'./assets/nearest-rescaled.png'
+                if args.nearest else './assets/bilinear-rescaled.png' if args.bilinear
+                else './assets/keys-rescaled.png', restored) if args.save else None
 
     mse, mae = calculate_mse_and_mae(image, restored)
-    print(f'MSE: {mse}\nMAE: {mae}')
+    print(f'{"MSE":<10} {"MAE":<10} {"ALGORITHM":<10}\n'
+          f'{round(mse, 2):<10} {round(mae, 2):<10} {"nearest" if args.nearest else "bilinear" if args.bilinear else "keys":<10}')
 
     rotated = rotate(image, args.rotate)
     rotated = rotated.astype(np.uint8)
-    cv2.imwrite(f'rotated-by-{args.rotate}.png', rotated) if args.save else None
+    cv2.imwrite(f'./assets/rotated-by-{args.rotate}.png', rotated) if args.save else None
 
     fig, axs = plt.subplots(1, 4, figsize=(12, 6), sharex=True, sharey=True)
     axs[0].imshow(image)
@@ -232,6 +237,7 @@ def main() -> None:
     axs[3].set_xticks([])
     axs[3].set_yticks([])
 
+    plt.savefig('./assets/all-operations.png') if args.save else None
     plt.show()
 
 
