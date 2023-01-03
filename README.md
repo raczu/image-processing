@@ -43,7 +43,7 @@ options:
 
 [lab-02 (demosaicing)](https://github.com/raczu/image-processing/tree/main/lab-02)
 ```bash
-$ python3.9 denosaicing.py --image ./image.bmp --bayer --nearest --save
+$ python3.9 demosaicing.py --image ./image.bmp --bayer --nearest --save
 ```
 
 **FULL USAGE**:
