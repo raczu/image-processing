@@ -43,7 +43,7 @@ options:
 
 [lab-02 (demosaicing)](https://github.com/raczu/image-processing/tree/main/lab-02)
 ```bash
-$ python3.9 denosaicing.py --image  ./image.bmp --bayer --nearest --save
+$ python3.9 demosaicing.py --image ./image.bmp --bayer --nearest --save
 ```
 
 **FULL USAGE**:
@@ -69,7 +69,7 @@ interpolation:
 
 [lab-03 (scaling and rotating raster images)](https://github.com/raczu/image-processing/tree/main/lab-03)
 ```bash
-$ python3.9 scale-and-rotate.py --image .\image.jpg --shrink 0.65 --rotate 65 --nearest --save
+$ python3.9 scale-and-rotate.py --image ./image.jpg --shrink 0.65 --rotate 65 --nearest --save
 ```
 
 **FULL USAGE**:
