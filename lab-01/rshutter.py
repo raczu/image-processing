@@ -2,6 +2,9 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
+from os import mkdir
+from os.path import isdir
+from shutil import rmtree
 from matplotlib.lines import Line2D
 from matplotlib.animation import FuncAnimation
 from matplotlib.animation import PillowWriter
@@ -51,17 +54,22 @@ def get_shuttered_prop_data(video: cv2.VideoCapture, lines: int) -> Tuple[List[n
         current_frame = cv2.cvtColor(current_frame, cv2.COLOR_BGR2RGB)
         read_frames += lines
 
+    video.release()
+
     return prop_data, shutter_data
 
 
-def animate(frame: int, prop: AxesImage, shuttered_prop: AxesImage,
-            data: Tuple[np.array, List[np.array]]) -> Tuple[AxesImage, AxesImage]:
+def animate(frame: int, prop: AxesImage, shuttered_prop: AxesImage, data: Tuple[np.array, List[np.array]],
+            lines: Tuple[Line2D, Line2D], nlines: int) -> Tuple[AxesImage, AxesImage, Line2D, Line2D]:
     prop_data, shuttered_prop_data = data
+    l1, l2 = lines
 
+    l1.set_ydata(SENSOR - frame * nlines)
     prop.set_data(prop_data[frame])
+    l2.set_ydata(SENSOR - frame * nlines)
     shuttered_prop.set_data(shuttered_prop_data[frame])
 
-    return prop, shuttered_prop
+    return prop, shuttered_prop, l1, l2
 
 
 def main() -> None:
@@ -82,6 +90,11 @@ def main() -> None:
         required=True,
         help='specify a number of lines that sensor can read at once')
 
+    parser.add_argument(
+        '--save',
+        action='store_true',
+        help='specify if generated animation should be saved')
+
     args = parser.parse_args()
 
     if args.blades not in (3, 5):
@@ -89,7 +102,7 @@ def main() -> None:
 
     prop_data = get_data(args.blades)
 
-    fig = plt.figure(figsize=(SENSOR / 100, SENSOR / 100), dpi=50)
+    fig = plt.figure(figsize=(SENSOR / 100, SENSOR / 100), dpi=100)
     ax = plt.Axes(fig, [0., 0., 1., 1.])
     ax.set_xlim(0, SENSOR)
     ax.set_ylim(0, SENSOR)
@@ -99,28 +112,38 @@ def main() -> None:
     prop, = plt.plot(prop_data[0][0], prop_data[0][1])
 
     animation = FuncAnimation(fig, update, frames=M, fargs=(prop, prop_data), interval=M)
-    animation.save('./propeller.gif', PillowWriter(fps=30))
-    propeller_animation = cv2.VideoCapture('./propeller.gif')
+    mkdir('./tmp') if not isdir('./tmp') else None
+    animation.save('./tmp/propeller.gif', PillowWriter(fps=30))
+    propeller_animation = cv2.VideoCapture('./tmp/propeller.gif')
 
     prop_data, shuttered_prop_data = get_shuttered_prop_data(propeller_animation, args.lines)
+    rmtree('./tmp') if isdir('./tmp') else None
 
     plt.close(fig)
-    fig, axs = plt.subplots(1, 2, figsize=(12, 6))
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
 
-    axs[0].set_xlim(0, SENSOR)
-    axs[0].set_ylim(0, SENSOR)
-    axs[0].set_xticks([])
-    axs[0].set_yticks([])
-    prop = axs[0].imshow(prop_data[0])
+    axes[0].set_xlim(0, SENSOR)
+    axes[0].set_ylim(0, SENSOR)
+    axes[0].set_xticks([])
+    axes[0].set_yticks([])
+    axes[0].set_title('PROPELLER ANIMATION')
+    l1 = axes[0].axhline(y=SENSOR, xmin=0, xmax=SENSOR, lw=1, color='black')
+    prop = axes[0].imshow(prop_data[0])
 
-    axs[1].set_xlim(0, SENSOR)
-    axs[1].set_ylim(0, SENSOR)
-    axs[1].set_xticks([])
-    axs[1].set_yticks([])
-    shuttered_prop = axs[1].imshow(shuttered_prop_data[0])
+    axes[1].set_xlim(0, SENSOR)
+    axes[1].set_ylim(0, SENSOR)
+    axes[1].set_xticks([])
+    axes[1].set_yticks([])
+    axes[1].set_title('ROLLING SHUTTER EFFECT SIMULATION')
+    l2 = axes[1].axhline(y=SENSOR, xmin=0, xmax=SENSOR, lw=1, color='black')
+    shuttered_prop = axes[1].imshow(shuttered_prop_data[0])
 
-    _ = FuncAnimation(fig, animate, frames=len(shuttered_prop_data),
-                      fargs=(prop, shuttered_prop, (prop_data, shuttered_prop_data)), interval=100)
+    animation = FuncAnimation(fig, animate, frames=len(shuttered_prop_data),
+                              fargs=(prop, shuttered_prop, (prop_data, shuttered_prop_data),
+                                     (l1, l2), args.lines), interval=100)
+
+    mkdir('./assets') if args.save and not isdir('./assets') else None
+    animation.save('./assets/rolling-shutter-simulation.gif', PillowWriter(fps=30))
 
     plt.show()
 
