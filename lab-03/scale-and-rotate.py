@@ -54,8 +54,8 @@ def bilinear(image: np.ndarray, size: int) -> np.ndarray:
             x_old = x / scale
             y_old = y / scale
 
-            x1, y1 = min(np.int64(np.floor(x_old)), img_size - 1), min(np.int64(np.floor(y_old)), img_size - 1)
-            x2, y2 = min(np.int64(np.ceil(x_old)), img_size - 1), min(np.int64(np.ceil(y_old)), img_size - 1)
+            x1, y1 = min(np.int16(np.floor(x_old)), img_size - 1), min(np.int16(np.floor(y_old)), img_size - 1)
+            x2, y2 = min(np.int16(np.ceil(x_old)), img_size - 1), min(np.int16(np.ceil(y_old)), img_size - 1)
 
             q11, q12 = image[x1][y1], image[x2][y1]
             q21, q22 = image[x1][y2], image[x2][y2]
@@ -70,9 +70,43 @@ def bilinear(image: np.ndarray, size: int) -> np.ndarray:
     return interpolated
 
 
+def weight(x: float) -> float:
+    a = -0.5
+    position = abs(x)
+
+    if -1 <= abs(x) <= 1:
+        return ((a + 2) * position**3) - ((a + 3) * position ** 2)
+    elif 1 < abs(x) < 2 or -2 < x < -1:
+        return (a * position**3) - (5 * a * position**2) + (8 * a * position) - 4 * a
+
 @benchmark
 def keys(image: np.ndarray, size: int) -> np.ndarray:
-    pass
+    # function was taken from:
+    # https://github.com/YasinEnigma/Image_Interpolation/blob/main/main.py
+
+    interpolated = np.zeros((size, size, 3))
+    img_size = image.shape[0:2][0]
+
+    for c in range(3):
+        for i in range(size):
+            for j in range(size):
+                xm, ym = (i + 0.5) * (img_size / size) - 0.5, (j + 0.5) * (img_size / size) - 0.5
+
+                xi, yi = np.floor(xm), np.floor(ym)
+                u = xm - xi
+                v = ym - yi
+
+                out = 0
+                for n in range(-1, 3):
+                    for m in range(-1, 3):
+                        if xi + n < 0 or xi + n >= img_size or yi + m < 0 or yi + m >= img_size:
+                            continue
+
+                        out += image[np.int16(xi + n), np.int16(yi + m), c] * weight(u - n) * weight(v - m)
+
+                interpolated[i, j, c] = np.clip(out, 0, 255)
+
+    return interpolated
 
 
 INTERPOLATIONS = {
@@ -96,8 +130,8 @@ def rotate(image: np.ndarray, angle: float) -> np.ndarray:
             x_prime = np.round(xt * np.cos(radians) - yt * np.sin(radians))
             y_prime = np.round(xt * np.sin(radians) + yt * np.cos(radians))
 
-            x_prime = np.int64(x_center - x_prime)
-            y_prime = np.int64(y_center - y_prime)
+            x_prime = np.int16(x_center - x_prime)
+            y_prime = np.int16(y_center - y_prime)
 
             if 0 <= x_prime < size and 0 <= y_prime < size and x_prime >= 0 and y_prime >= 0:
                 rotated[y_prime, x_prime, :] = image[y, x, :]
