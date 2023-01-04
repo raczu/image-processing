@@ -63,7 +63,7 @@ filters:
 
 interpolation:
   --nearest      specify if NEAREST interpolation should be applied to image
-  --linear       specify if LINEAR interpolation should be applied to image
+  --bilinear       specify if BILINEAR interpolation should be applied to image
 
 ```
 
@@ -98,11 +98,11 @@ interpolation:
 
 [lab-02 (demosaicing)](https://github.com/raczu/image-processing/tree/main/lab-02)
 
-Not finished yet.
+![demosaicing](https://github.com/raczu/image-processing/blob/main/lab-02/assets/summary.png)
 
 [lab-03 (scaling and rotating raster images)](https://github.com/raczu/image-processing/tree/main/lab-03)
 
-![scaling-and-rotating-raster-images](https://github.com/raczu/image-processing/blob/main/lab-03/assets/all-operations.png)
+![scaling-and-rotating-raster-images](https://github.com/raczu/image-processing/blob/main/lab-03/assets/summary.png)
 
 
 ## License
