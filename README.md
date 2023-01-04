@@ -63,7 +63,7 @@ filters:
 
 interpolation:
   --nearest      specify if NEAREST interpolation should be applied to image
-  --bilinear       specify if BILINEAR interpolation should be applied to image
+  --bilinear     specify if BILINEAR interpolation should be applied to image
 
 ```
 
