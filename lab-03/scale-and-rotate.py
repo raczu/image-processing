@@ -237,7 +237,7 @@ def main() -> None:
     axs[3].set_xticks([])
     axs[3].set_yticks([])
 
-    plt.savefig('./assets/all-operations.png') if args.save else None
+    plt.savefig('./assets/summary.png') if args.save else None
     plt.show()
 
 
