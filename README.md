@@ -100,10 +100,9 @@ interpolation:
 
 Not finished yet.
 
-
 [lab-03 (scaling and rotating raster images)](https://github.com/raczu/image-processing/tree/main/lab-03)
 
-Not finished yet.
+![scaling-and-rotating-raster-images](https://github.com/raczu/image-processing/blob/main/lab-03/assets/all-operations.png)
 
 
 ## License
