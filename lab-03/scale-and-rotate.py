@@ -152,17 +152,12 @@ def restore_default_size(image: np.ndarray, size: int, algorithm: str) -> np.nda
 
 def calculate_mse_and_mae(original: np.ndarray, restored: np.ndarray) -> tuple[float, float]:
     size = original.shape[0:2][0]
-    mse, mae = 0.0, 0.0
-    original, restored = original.astype(np.float64), restored.astype(np.float64)
 
-    for x in range(size):
-        for y in range(size):
-            difference = np.sum(original[x][y] - restored[x][y])
-            mse += difference ** 2
-            mae += np.absolute(difference)
+    mse = np.sum((original.astype('float') - restored.astype('float'))**2)
+    mae = np.absolute(np.sum(original.astype('float') - restored.astype('float')))
     size = size ** 2
 
-    return mse / size, mae / size
+    return mse / float(size), mae / float(size)
 
 
 def main() -> None:
