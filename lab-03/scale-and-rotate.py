@@ -30,7 +30,7 @@ def nearest(image: np.ndarray, size: int) -> np.ndarray:
 
     for y in range(size):
         for x in range(size):
-            x_nearest, y_nearest = np.int64(np.round(x / scale)), np.int64(np.round(y / scale))
+            x_nearest, y_nearest = np.int16(np.round(x / scale)), np.int16(np.round(y / scale))
 
             if x_nearest == img_size:  # sometimes it has problem with indexes
                 x_nearest -= 1
@@ -70,41 +70,79 @@ def bilinear(image: np.ndarray, size: int) -> np.ndarray:
     return interpolated
 
 
-def weight(x: float) -> float:
-    a = -0.5
-    position = abs(x)
+def u(s: float, a: float) -> float:
+    if (abs(s) >= 0) & (abs(s) <= 1):
+        return (a + 2) * (abs(s)**3) - (a + 3) * (abs(s)**2) + 1
+    elif (abs(s) > 1) & (abs(s) <= 2):
+        return a * (abs(s)**3) - (5 * a) * (abs(s)**2) + (8 * a) * abs(s)- 4 * a
+    return 0
 
-    if -1 <= abs(x) <= 1:
-        return ((a + 2) * position**3) - ((a + 3) * position ** 2)
-    elif 1 < abs(x) < 2 or -2 < x < -1:
-        return (a * position**3) - (5 * a * position**2) + (8 * a * position) - 4 * a
+
+def padding(image: np.ndarray, height: int, width: int, n_colours: int = 3) -> np.ndarray:
+    padded = np.zeros((height + 4, width + 4, n_colours))
+    padded[2:height + 2, 2:width + 2, :n_colours] = image
+
+    padded[2:height + 2, 0:2, :n_colours] = image[:, 0:1, :n_colours]
+    padded[height + 2:height + 4, 2:width + 2, :] = image[height - 1:height, :, :]
+    padded[2:height + 2, width + 2:width + 4, :] = image[:, width - 1:width, :]
+    padded[0:2, 2:width + 2, :n_colours] = image[0:1, :, :n_colours]
+
+    padded[0:2, 0:2, :n_colours] = image[0, 0, :n_colours]
+    padded[height + 2:height + 4, 0:2, :n_colours] = image[height - 1, 0, :n_colours]
+    padded[height + 2:height + 4, width + 2:width + 4, :n_colours] = image[height - 1, width - 1, :n_colours]
+    padded[0:2, width + 2:width + 4, :n_colours] = image[0, width - 1, :n_colours]
+
+    return padded
+
 
 @benchmark
 def keys(image: np.ndarray, size: int) -> np.ndarray:
     # function was taken from:
-    # https://github.com/YasinEnigma/Image_Interpolation/blob/main/main.py
+    # https://github.com/rootpine/Bicubic-interpolation/blob/master/bicubic.py
 
     interpolated = np.zeros((size, size, 3))
     img_size = image.shape[0:2][0]
+    image = padding(image, img_size, img_size, 3)
+
+    a = -0.5
+    h = 1 / (size / img_size)
 
     for c in range(3):
-        for i in range(size):
-            for j in range(size):
-                xm, ym = (i + 0.5) * (img_size / size) - 0.5, (j + 0.5) * (img_size / size) - 0.5
+        for j in range(size):
+            for i in range(size):
+                x, y = i * h + 2, j * h + 2
 
-                xi, yi = np.floor(xm), np.floor(ym)
-                u = xm - xi
-                v = ym - yi
+                x1 = 1 + x - np.floor(x)
+                x2 = x - np.floor(x)
+                x3 = np.floor(x) + 1 - x
+                x4 = np.floor(x) + 2 - x
 
-                out = 0
-                for n in range(-1, 3):
-                    for m in range(-1, 3):
-                        if xi + n < 0 or xi + n >= img_size or yi + m < 0 or yi + m >= img_size:
-                            continue
+                y1 = 1 + y - np.floor(y)
+                y2 = y - np.floor(y)
+                y3 = np.floor(y) + 1 - y
+                y4 = np.floor(y) + 2 - y
 
-                        out += image[np.int16(xi + n), np.int16(yi + m), c] * weight(u - n) * weight(v - m)
+                mat_l = np.matrix([[u(x1, a), u(x2, a), u(x3, a), u(x4, a)]])
+                mat_m = np.matrix([[image[np.int16(y - y1), np.int16(x - x1), c],
+                                    image[np.int16(y - y2), np.int16(x - x1), c],
+                                    image[np.int16(y + y3), np.int16(x - x1), c],
+                                    image[np.int16(y + y4), np.int16(x - x1), c]],
+                                   [image[np.int16(y - y1), np.int16(x - x2), c],
+                                    image[np.int16(y - y2), np.int16(x - x2), c],
+                                    image[np.int16(y + y3), np.int16(x - x2), c],
+                                    image[np.int16(y + y4), np.int16(x - x2), c]],
+                                   [image[np.int16(y - y1), np.int16(x + x3), c],
+                                    image[np.int16(y - y2), np.int16(x + x3), c],
+                                    image[np.int16(y + y3), np.int16(x + x3), c],
+                                    image[np.int16(y + y4), np.int16(x + x3), c]],
+                                   [image[np.int16(y - y1), np.int16(x + x4), c],
+                                    image[np.int16(y - y2), np.int16(x + x4), c],
+                                    image[np.int16(y + y3), np.int16(x + x4), c],
+                                    image[np.int16(y + y4), np.int16(x + x4), c]]])
 
-                interpolated[i, j, c] = np.clip(out, 0, 255)
+                mat_r = np.matrix([[u(y1, a)], [u(y2, a)], [u(y3, a)], [u(y4, a)]])
+
+                interpolated[j, i, c] = np.dot(np.dot(mat_l, mat_m), mat_r)
 
     return interpolated
 
@@ -141,7 +179,7 @@ def rotate(image: np.ndarray, angle: float) -> np.ndarray:
 
 def shrink(image: np.ndarray, factor: float, algorithm: str) -> np.ndarray:
     size, _ = image.shape[0:2]
-    new_size = np.int64(np.ceil(size * factor))
+    new_size = np.int16(np.ceil(size * factor))
 
     return INTERPOLATIONS[algorithm](image, new_size)
 
@@ -150,14 +188,11 @@ def restore_default_size(image: np.ndarray, size: int, algorithm: str) -> np.nda
     return INTERPOLATIONS[algorithm](image, size)
 
 
-def calculate_mse_and_mae(original: np.ndarray, restored: np.ndarray) -> tuple[float, float]:
-    size = original.shape[0:2][0]
+def calculate_mse_and_mae(original: np.ndarray, restored: np.ndarray) -> tuple[np.float64, np.float64]:
+    mse = np.mean(np.square(np.subtract(original.astype(np.float64), restored.astype(np.float64))))
+    mae = np.mean(np.abs(original.astype(np.float64) - restored.astype(np.float64)))
 
-    mse = np.sum((original.astype('float') - restored.astype('float'))**2)
-    mae = np.absolute(np.sum(original.astype('float') - restored.astype('float')))
-    size = size ** 2
-
-    return mse / float(size), mae / float(size)
+    return mse, mae
 
 
 def main() -> None:
@@ -226,42 +261,39 @@ def main() -> None:
 
     mkdir('./assets') if args.save and not isdir('./assets') else None
 
-    shrank = shrank.astype(np.uint8)
     cv2.imwrite(f'./assets/nearest-scaled.png' if args.nearest
                 else './assets/bilinear-scaled.png' if args.bilinear
                 else './assets/keys-scaled.png', shrank) if args.save else None
 
-    restored = restored.astype(np.uint8)
     cv2.imwrite(f'./assets/nearest-rescaled.png'
                 if args.nearest else './assets/bilinear-rescaled.png' if args.bilinear
                 else './assets/keys-rescaled.png', restored) if args.save else None
 
     mse, mae = calculate_mse_and_mae(image, restored)
     print(f'{"MSE":<10} {"MAE":<10} {"ALGORITHM":<10}\n'
-          f'{round(mse, 2):<10} {round(mae, 2):<10} {"nearest" if args.nearest else "bilinear" if args.bilinear else "keys":<10}')
+          f'{np.round(mse, 2):<10} {np.round(mae, 2):<10} {"nearest" if args.nearest else "bilinear" if args.bilinear else "keys":<10}')
 
     rotated = rotate(image, args.rotate)
-    rotated = rotated.astype(np.uint8)
     cv2.imwrite(f'./assets/rotated-by-{args.rotate}.png', rotated) if args.save else None
 
     fig, axs = plt.subplots(1, 4, figsize=(12, 6), sharex=True, sharey=True)
-    axs[0].imshow(image)
+    axs[0].imshow(image.astype(np.uint8))
     axs[0].set_title('ORIGINAL')
     axs[0].set_xticks([])
     axs[0].set_yticks([])
 
-    axs[1].imshow(shrank)
+    axs[1].imshow(np.clip(shrank, 0, 255, out=shrank).astype(np.uint8))
     axs[1].set_title(f'SCALED {"(NEAREST)" if args.nearest else "(BILINEAR)" if args.bilinear else "(KEYS)"}')
     axs[1].set_xticks([])
     axs[1].set_yticks([])
 
-    axs[2].imshow(restored)
+    axs[2].imshow(np.clip(restored, 0, 255, out=restored).astype(np.uint8))
     axs[2].set_title(f'RESCALED TO ORIGINAL'
                      f' {"(NEAREST)" if args.nearest else "(BILINEAR)" if args.bilinear else "(KEYS)"}')
     axs[2].set_xticks([])
     axs[2].set_yticks([])
 
-    axs[3].imshow(rotated)
+    axs[3].imshow(np.clip(rotated, 0, 255, out=rotated).astype(np.uint8))
     axs[3].set_title(f'ROTATED (BY {args.rotate})')
     axs[3].set_xticks([])
     axs[3].set_yticks([])
