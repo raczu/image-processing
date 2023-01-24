@@ -253,11 +253,13 @@ def main() -> None:
     shrank = shrink(image, args.shrink, 'nearest') if args.nearest \
         else shrink(image, args.shrink, 'bilinear') if args.bilinear \
         else shrink(image, args.shrink, 'keys')
+    np.clip(shrank, 0, 255, out=shrank)
 
     size, _ = image.shape[0:2]
     restored = restore_default_size(shrank, size, 'nearest') if args.nearest \
         else restore_default_size(shrank, size, 'bilinear') if args.bilinear \
         else restore_default_size(shrank, size, 'keys')
+    np.clip(restored, 0, 255, out=restored)
 
     mkdir('./assets') if args.save and not isdir('./assets') else None
 
@@ -282,18 +284,18 @@ def main() -> None:
     axs[0].set_xticks([])
     axs[0].set_yticks([])
 
-    axs[1].imshow(np.clip(shrank, 0, 255, out=shrank).astype(np.uint8))
+    axs[1].imshow(shrank.astype(np.uint8))
     axs[1].set_title(f'SCALED {"(NEAREST)" if args.nearest else "(BILINEAR)" if args.bilinear else "(KEYS)"}')
     axs[1].set_xticks([])
     axs[1].set_yticks([])
 
-    axs[2].imshow(np.clip(restored, 0, 255, out=restored).astype(np.uint8))
+    axs[2].imshow(restored.astype(np.uint8))
     axs[2].set_title(f'RESCALED TO ORIGINAL'
                      f' {"(NEAREST)" if args.nearest else "(BILINEAR)" if args.bilinear else "(KEYS)"}')
     axs[2].set_xticks([])
     axs[2].set_yticks([])
 
-    axs[3].imshow(np.clip(rotated, 0, 255, out=rotated).astype(np.uint8))
+    axs[3].imshow(rotated.astype(np.uint8))
     axs[3].set_title(f'ROTATED (BY {args.rotate})')
     axs[3].set_xticks([])
     axs[3].set_yticks([])
