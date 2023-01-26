@@ -34,6 +34,20 @@ def gaussian(size: int, sigma: float = 1) -> np.ndarray:
     return kernel / np.sum(kernel)
 
 
+def median(image: np.ndarray, size: int) -> np.ndarray:
+    height, width = image.shape[0:2]
+    radius = size // 2
+    padded = np.pad(image, pad_width=((radius, radius), (radius, radius), (0, 0)), mode='edge')
+    denoised = np.zeros_like(image)
+
+    for y in range(height):
+        for x in range(width):
+            for c in range(3):
+                denoised[y, x, c] = np.median(padded[y:y + radius, x:x + radius, c].flatten())
+
+    return denoised
+
+
 def convolution2d(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     height, width = image.shape[0:2]
     ks = kernel.shape[0] // 2
@@ -48,7 +62,7 @@ def convolution2d(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     return convolved
 
 
-FILTERS = {
+KERNELS = {
     'box': box,
     'gaussian': gaussian
 }
@@ -56,8 +70,7 @@ FILTERS = {
 
 @benchmark
 def denoise(image: np.ndarray, size: int, f: str = "") -> np.ndarray:
-    if f:
-        return convolution2d(image, FILTERS[f](size))
+    return convolution2d(image, KERNELS[f](size)) if f else median(image, size)
 
 
 def calculate_mse_and_mae(original: np.ndarray, restored: np.ndarray) -> tuple[np.float64, np.float64]:
@@ -163,6 +176,7 @@ def main() -> None:
     axs[3].set_xticks([])
     axs[3].set_yticks([])
 
+    plt.subplots_adjust(0.025, 0, 0.975, 1, hspace=0.01, wspace=0.05)
     plt.savefig('./assets/summary.jpg') if args.save else None
     plt.show()
 
