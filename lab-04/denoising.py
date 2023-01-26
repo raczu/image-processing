@@ -43,7 +43,7 @@ def median(image: np.ndarray, size: int) -> np.ndarray:
     for y in range(height):
         for x in range(width):
             for c in range(3):
-                denoised[y, x, c] = np.median(padded[y:y + radius, x:x + radius, c].flatten())
+                denoised[y, x, c] = np.median(padded[y:y + size, x:x + size, c].flatten())
 
     return denoised
 
