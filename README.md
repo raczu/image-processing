@@ -20,6 +20,7 @@ Labolatory assignments related to image processing using python3.9+ (due to the 
 * [lab-02 (demosaicing)](https://github.com/raczu/image-processing/tree/main/lab-02)
 * [lab-03 (scaling and rotating raster images)](https://github.com/raczu/image-processing/tree/main/lab-03)
 * [lab-04 (denoising images)](https://github.com/raczu/image-processing/tree/main/lab-04)
+* [lab-05 (orthogonal basis)](https://github.com/raczu/image-processing/tree/main/lab-05)
 
 ## Example scripts executions
 [lab-01 (rolling shutter effect simulation)](https://github.com/raczu/image-processing/tree/main/lab-01)
@@ -115,6 +116,32 @@ filters:
   --box                 specify if BOX filter should be applied to denoise the image
   --median              specify if MEDIAN filter should be applied to denoise the image
   --gaussian            specify if GAUSSIAN filter should be applied to denoise the image
+```
+
+[lab-05 (orthogonal basis)](https://github.com/raczu/image-processing/tree/main/lab-05)
+```bash
+$ python3.9 orthogonal-basis.py --image ./lenna.png --fourier --hpf --size 80
+```
+
+**FULL USAGE**:
+```bash
+usage: orthogonal-basis.py [-h] --image IMAGE [--fourier] [--size SIZE] [--lpf | --hpf] [--dct] [--wavelet]
+
+Arguments to configure a script
+
+options:
+  -h, --help     show this help message and exit
+  --image IMAGE  specify a path to the image
+
+transforms:
+  --fourier      specify if FOURIER transform should be applied to the image
+  --size SIZE    specify a size of the low pass or high pass filter
+  --dct          specify if DCT filter should be applied to the image
+  --wavelet      specify if WAVELET transform should be applied to the image
+
+filters:
+  --lpf          specify if LOW PASS filter should be applied to the image
+  --hpf          specify if HIGH PASS filter should be applied to the image
 ```
 
 
