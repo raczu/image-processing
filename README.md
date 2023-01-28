@@ -148,20 +148,41 @@ filters:
 ## Outputs
 [lab-01 (rolling shutter effect simulation)](https://github.com/raczu/image-processing/tree/main/lab-01)
 
-![rolling-shutter-effect-simulation](https://github.com/raczu/image-processing/blob/main/lab-01/assets/rolling-shutter-simulation.gif)
+| Aliasing 2D |
+| :-: |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-01/assets/rolling-shutter-simulation.gif" width="100%" /> |
+
+<br />
 
 [lab-02 (demosaicing)](https://github.com/raczu/image-processing/tree/main/lab-02)
 
-![demosaicing](https://github.com/raczu/image-processing/blob/main/lab-02/assets/summary.png)
+| Original image | CFA (BAYER) | Demosaiced (BILINEAR) | Difference |
+| :-: | :-: | :-: | :-: |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-02/image.bmp" width="240" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/bayer.png" width="240" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/demosaiced-bayer-bilinear.png" width="240" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/difference-original-demosaiced-bayer-bilinear.png" width="240" /> |
+
+<br />
 
 [lab-03 (scaling and rotating raster images)](https://github.com/raczu/image-processing/tree/main/lab-03)
 
-![scaling-and-rotating-raster-images](https://github.com/raczu/image-processing/blob/main/lab-03/assets/summary.png)
+| Original image | Scaled down by half then rescaled (Keys) | Rotated by 22.5 |
+| :-: | :-: | :-: |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-03/image.jpg" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-03/assets/keys-rescaled.png" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-03/assets/rotated-by-22.5.png" width="320" /> |
+
+<br />
 
 [lab-04 (denoising images)](https://github.com/raczu/image-processing/tree/main/lab-04)
 
-![denoising-images](https://github.com/raczu/image-processing/blob/main/lab-04/assets/summary.jpg)
+| Noise image | Denoised image (GAUSSIAN 7x7) | Difference |
+| :-: | :-: | :-: |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-04/noise-leopard.jpg" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-04/assets/denoised-gaussian-7x7.jpg" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-04/assets/difference-original-denoised-gaussian-7x7.jpg" width="320" /> |
 
+<br />
+
+[lab-05 (orthogonal basis)](https://github.com/raczu/image-processing/tree/main/lab-05)
+
+| Lenna (grayscale) | LPF (80) | HPF (60) |
+| :-: | :-: | :-: |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/lenna-gray.jpg" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/approximated-fourier-lpf-80.jpg" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/approximated-fourier-hpf-60.jpg" width="320" /> |
 
 ## License
 
