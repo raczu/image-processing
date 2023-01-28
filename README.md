@@ -31,7 +31,7 @@ $ python3.9 script-name.py -h
 
 | [lab-01 (rolling shutter effect simulation)](https://github.com/raczu/image-processing/tree/main/lab-01) |
 | :-: |
-| <img src="https://github.com/raczu/image-processing/blob/main/lab-01/assets/rolling-shutter-simulation.gif" /> |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-01/assets/rolling-shutter-simulation.gif" width="90%" /> |
 
 ```bash
 $ python3.9 rshutter.py -b 5 -l 3 --save
@@ -41,7 +41,7 @@ $ python3.9 rshutter.py -b 5 -l 3 --save
 
 | [lab-02 (demosaicing)](https://github.com/raczu/image-processing/tree/main/lab-02) |
 | :-: |
-| <img src="https://github.com/raczu/image-processing/blob/main/lab-02/image.bmp" width="24.5%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/bayer.png" width="24.5%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/demosaiced-bayer-bilinear.png" width="24.5%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/difference-original-demosaiced-bayer-bilinear.png" width="24.5%" /> |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-02/image.bmp" width="22.5%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/bayer.png" width="22.5%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/demosaiced-bayer-bilinear.png" width="22.5%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/difference-original-demosaiced-bayer-bilinear.png" width="22.5%" /> |
 
 ```bash
 $ python3.9 demosaicing.py --image ./image.bmp --bayer --nearest --save
@@ -51,7 +51,7 @@ $ python3.9 demosaicing.py --image ./image.bmp --bayer --nearest --save
 
 | [lab-03 (scaling and rotating raster images)](https://github.com/raczu/image-processing/tree/main/lab-03) |
 | :-: |
-| <img src="https://github.com/raczu/image-processing/blob/main/lab-03/image.jpg" width="33%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-03/assets/keys-rescaled.png" width="33%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-03/assets/rotated-by-22.5.png" width="33%" /> |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-03/image.jpg" width="30%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-03/assets/keys-rescaled.png" width="30%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-03/assets/rotated-by-22.5.png" width="30%" /> |
 
 ```bash
 $ python3.9 scale-and-rotate.py --image ./image.jpg --shrink 0.65 --rotate 65 --nearest --save
@@ -61,7 +61,7 @@ $ python3.9 scale-and-rotate.py --image ./image.jpg --shrink 0.65 --rotate 65 --
 
 | [lab-04 (denoising images)](https://github.com/raczu/image-processing/tree/main/lab-04) |
 | :-: |
-| <img src="https://github.com/raczu/image-processing/blob/main/lab-04/noise-leopard.jpg" width="33%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-04/assets/denoised-gaussian-7x7.jpg" width="33%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-04/assets/difference-original-denoised-gaussian-7x7.jpg" width="33%" /> |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-04/noise-leopard.jpg" width="30%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-04/assets/denoised-gaussian-7x7.jpg" width="30%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-04/assets/difference-original-denoised-gaussian-7x7.jpg" width="30%" /> |
 
 ```bash
 $ python3.9 denoising.py --image ./image.jpg --noise-image ./noise-leopard.jph --box --size 7 --save
@@ -71,7 +71,7 @@ $ python3.9 denoising.py --image ./image.jpg --noise-image ./noise-leopard.jph -
 
 | [lab-05 (orthogonal basis)](https://github.com/raczu/image-processing/tree/main/lab-05) |
 | :-: |
-| <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/lenna-gray.jpg" width="33%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/approximated-fourier-lpf-80.jpg" width="33%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/approximated-fourier-hpf-60.jpg" width="33%" /> |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/lenna-gray.jpg" width="30%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/approximated-fourier-lpf-80.jpg" width="30%" /> <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/approximated-fourier-hpf-60.jpg" width="30%" /> |
 
 ```bash
 $ python3.9 orthogonal-basis.py --image ./lenna.png --fourier --hpf --size 80
