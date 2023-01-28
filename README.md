@@ -150,7 +150,7 @@ filters:
 
 | Aliasing 2D |
 | :-: |
-| <img src="https://github.com/raczu/image-processing/blob/main/lab-01/assets/rolling-shutter-simulation.gif" width="100%" /> |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-01/assets/rolling-shutter-simulation.gif" width="714" /> |
 
 <br />
 
@@ -158,23 +158,23 @@ filters:
 
 | Original image | CFA (BAYER) | Demosaiced (BILINEAR) | Difference |
 | :-: | :-: | :-: | :-: |
-| <img src="https://github.com/raczu/image-processing/blob/main/lab-02/image.bmp" width="240" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/bayer.png" width="240" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/demosaiced-bayer-bilinear.png" width="240" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/difference-original-demosaiced-bayer-bilinear.png" width="240" /> |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-02/image.bmp" width="155" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/bayer.png" width="155" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/demosaiced-bayer-bilinear.png" width="155" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-02/assets/difference-original-demosaiced-bayer-bilinear.png" width="155" /> |
 
 <br />
 
 [lab-03 (scaling and rotating raster images)](https://github.com/raczu/image-processing/tree/main/lab-03)
 
-| Original image | Scaled down by half then rescaled (Keys) | Rotated by 22.5 |
+| Original image | Rescaled (KEYS) | Rotated by 22.5 |
 | :-: | :-: | :-: |
-| <img src="https://github.com/raczu/image-processing/blob/main/lab-03/image.jpg" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-03/assets/keys-rescaled.png" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-03/assets/rotated-by-22.5.png" width="320" /> |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-03/image.jpg" width="220" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-03/assets/keys-rescaled.png" width="220" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-03/assets/rotated-by-22.5.png" width="220" /> |
 
 <br />
 
 [lab-04 (denoising images)](https://github.com/raczu/image-processing/tree/main/lab-04)
 
-| Noise image | Denoised image (GAUSSIAN 7x7) | Difference |
+| Noise image | Denoised image | Difference |
 | :-: | :-: | :-: |
-| <img src="https://github.com/raczu/image-processing/blob/main/lab-04/noise-leopard.jpg" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-04/assets/denoised-gaussian-7x7.jpg" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-04/assets/difference-original-denoised-gaussian-7x7.jpg" width="320" /> |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-04/noise-leopard.jpg" width="220" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-04/assets/denoised-gaussian-7x7.jpg" width="220" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-04/assets/difference-original-denoised-gaussian-7x7.jpg" width="220" /> |
 
 <br />
 
@@ -182,7 +182,7 @@ filters:
 
 | Lenna (grayscale) | LPF (80) | HPF (60) |
 | :-: | :-: | :-: |
-| <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/lenna-gray.jpg" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/approximated-fourier-lpf-80.jpg" width="320" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/approximated-fourier-hpf-60.jpg" width="320" /> |
+| <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/lenna-gray.jpg" width="220" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/approximated-fourier-lpf-80.jpg" width="220" /> | <img src="https://github.com/raczu/image-processing/blob/main/lab-05/assets/approximated-fourier-hpf-60.jpg" width="220" /> |
 
 ## License
 
